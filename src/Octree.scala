@@ -1,6 +1,6 @@
 sealed trait Octree[+A]
 
-case class OcNode[A](coords: A,
+case class OcNode[A](placement: A,
                     up_00: Octree[A], up_01: Octree[A],
                      up_10: Octree[A], up_11: Octree[A],
                      down_00: Octree[A], down_01: Octree[A],

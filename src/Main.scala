@@ -16,7 +16,7 @@ class Main extends Application {
 
   //Shape3D is an abstract class that extends javafx.scene.Node
   //Box and Cylinder are subclasses of Shape3D
-  type Section = (Placement, List[Node])  //example: ( ((0.0,0.0,0.0), 2.0), List(new Cylinder(0.5, 1, 10)))
+  type Section = (Placement, List[Node]) //example: ( ((0.0,0.0,0.0), 2.0), List(new Cylinder(0.5, 1, 10)))
 
 
   /*
@@ -30,13 +30,13 @@ class Main extends Application {
 
     //Materials to be applied to the 3D objects
     val redMaterial = new PhongMaterial()
-    redMaterial.setDiffuseColor(Color.rgb(150,0,0))
+    redMaterial.setDiffuseColor(Color.rgb(150, 0, 0))
 
     val greenMaterial = new PhongMaterial()
-    greenMaterial.setDiffuseColor(Color.rgb(0,255,0))
+    greenMaterial.setDiffuseColor(Color.rgb(0, 255, 0))
 
     val blueMaterial = new PhongMaterial()
-    blueMaterial.setDiffuseColor(Color.rgb(0,0,150))
+    blueMaterial.setDiffuseColor(Color.rgb(0, 0, 150))
 
     //3D objects
     val lineX = new Line(0, 0, 200, 0)
@@ -63,22 +63,22 @@ class Main extends Application {
     wiredBox.setDrawMode(DrawMode.LINE)
 
     val cylinder1 = new Cylinder(0.5, 1, 10)
-    cylinder1.setTranslateX(6)
-    cylinder1.setTranslateY(6)
-    cylinder1.setTranslateZ(6)
-    cylinder1.setScaleX(6)
-    cylinder1.setScaleY(6)
-    cylinder1.setScaleZ(6)
+    cylinder1.setTranslateX(2)
+    cylinder1.setTranslateY(2)
+    cylinder1.setTranslateZ(2)
+    cylinder1.setScaleX(2)
+    cylinder1.setScaleY(2)
+    cylinder1.setScaleZ(2)
     cylinder1.setMaterial(greenMaterial)
 
-    val box1 = new Box(1, 1, 1)  //
+    val box1 = new Box(1, 1, 1) //
     box1.setTranslateX(5)
     box1.setTranslateY(5)
     box1.setTranslateZ(5)
     box1.setMaterial(greenMaterial)
 
     // 3D objects (group of nodes - javafx.scene.Node) that will be provide to the subScene
-    val worldRoot:Group = new Group(wiredBox, camVolume, lineX, lineY, lineZ, cylinder1, box1)
+    val worldRoot: Group = new Group(wiredBox, camVolume, lineX, lineY, lineZ, cylinder1, box1)
 
     // Camera
     val camera = new PerspectiveCamera(true)
@@ -111,9 +111,9 @@ class Main extends Application {
     cameraView.getCamera.setTranslateZ(-50)
     cameraView.startViewing
 
-      // Position of the CameraView: Right-bottom corner
-      StackPane.setAlignment(cameraView, Pos.BOTTOM_RIGHT)
-      StackPane.setMargin(cameraView, new Insets(5))
+    // Position of the CameraView: Right-bottom corner
+    StackPane.setAlignment(cameraView, Pos.BOTTOM_RIGHT)
+    StackPane.setMargin(cameraView, new Insets(5))
 
     // Scene - defines what is rendered (in this case the subScene and the cameraView)
     val root = new StackPane(subScene, cameraView)
@@ -133,36 +133,42 @@ class Main extends Application {
     stage.setScene(scene)
     stage.show
 
-/*
+    val b: Node = new Box(5, 5, 5)
+    b.setTranslateX(5)
+    b.setTranslateY(5)
+    b.setTranslateZ(5)
+
     //oct1 - example of an Octree[Placement] that contains only one Node (i.e. cylinder1)
     //In case of difficulties to implement task T2 this octree can be used as input for tasks T3, T4 and T5
 
     val placement1: Placement = ((0, 0, 0), 8.0)
-    val sec1: Section = (((0.0,0.0,0.0), 4.0), List(cylinder1.asInstanceOf[Node]))
+    val sec1: Section = (((0.0, 0.0, 0.0), 4.0), List(cylinder1.asInstanceOf[Node]))
     val ocLeaf1 = OcLeaf(sec1)
-    val oct1:Octree[Placement] = OcNode[Placement](placement1, ocLeaf1, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty)
+    val oct1: Octree[Placement] = OcNode[Placement](placement1, ocLeaf1, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty)
 
     //example of bounding boxes (corresponding to the octree oct1) added manually to the world
-    val b2 = new Box(8,8,8)
+    val b2 = new Box(8, 8, 8)
     //translate because it is added by defaut to the coords (0,0,0)
-    b2.setTranslateX(8/2)
-    b2.setTranslateY(8/2)
-    b2.setTranslateZ(8/2)
+    b2.setTranslateX(8 / 2)
+    b2.setTranslateY(8 / 2)
+    b2.setTranslateZ(8 / 2)
     b2.setMaterial(redMaterial)
     b2.setDrawMode(DrawMode.LINE)
 
-    val b3 = new Box(4,4,4)
+    val b3 = new Box(4, 4, 4)
     //translate because it is added by defaut to the coords (0,0,0)
-    b3.setTranslateX(4/2)
-    b3.setTranslateY(4/2)
-    b3.setTranslateZ(4/2)
+    b3.setTranslateX(4 / 2)
+    b3.setTranslateY(4 / 2)
+    b3.setTranslateZ(4 / 2)
     b3.setMaterial(redMaterial)
     b3.setDrawMode(DrawMode.LINE)
 
     //adding boxes b2 and b3 to the world
     worldRoot.getChildren.add(b2)
     worldRoot.getChildren.add(b3)
-*/
+
+    //val file = scala.io.StdIn.readLine("Enter your File: ")
+    readFile(worldRoot, "conf.txt")
   }
 
   override def init(): Unit = {
@@ -173,6 +179,51 @@ class Main extends Application {
     println("stopped")
   }
 
+  def readFile(w: Group, file: String): Unit = {
+    val read = new ReadFile
+    val arr: Array[String] = read.readFromFile(file)
+      for (line <- arr) {
+        val sp = (line.split(' '))
+        val sp2 = sp(1).split(Array('(', ',', ')'))
+        val red = sp2(1)
+        val green = sp2(2)
+        val blue = sp2(3)
+        val translX = sp(2).toDouble
+        val translY = sp(3).toDouble
+        val translZ = sp(4).toDouble
+        val escX = sp(5).toDouble
+        val escY = sp(6).toDouble
+        val escZ = sp(7).toDouble
+        sp(0) match {
+          case "Cylinder" => {
+            var cylinder = new Cylinder(10, 20, 10)
+            cylinder.setTranslateX(translX)
+            cylinder.setTranslateY(translY)
+            cylinder.setTranslateZ(translZ)
+            cylinder.setScaleX(escX)
+            cylinder.setScaleY(escY)
+            cylinder.setScaleZ(escZ)
+            var color = new PhongMaterial()
+            color.setDiffuseColor(Color.rgb(red.toInt, green.toInt, blue.toInt))
+            cylinder.setMaterial(color)
+            w.getChildren.add(cylinder)
+          }
+          case "Box" => {
+            var box = new Box(10, 20, 10)
+            box.setTranslateX(translX)
+            box.setTranslateY(translY)
+            box.setTranslateZ(translZ)
+            box.setScaleX(escX)
+            box.setScaleY(escY)
+            box.setScaleZ(escZ)
+            var color = new PhongMaterial()
+            color.setDiffuseColor(Color.rgb(red.toInt, green.toInt, blue.toInt))
+            box.setMaterial(color)
+            w.getChildren.add(box)
+          }
+        }
+      }
+  }
 }
 
 object FxApp {
@@ -181,4 +232,3 @@ object FxApp {
     Application.launch(classOf[Main], args: _*)
   }
 }
-
